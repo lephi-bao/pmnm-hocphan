@@ -1,15 +1,31 @@
 **Bài 1.2**
 1. Giới thiệu: <br>
    OpenOffice.org là một bộ phần mềm văn phòng mã nguồn mở được Sun Microsystems mở mã nguồn vào năm 2000. Dự án nhanh chóng hình thành một cộng đồng phát triển lớn và trở thành một trong những dự án phần mềm mã nguồn mở đáng chú ý. Tuy nhiên, sau khi Oracle mua lại Sun Microsystems vào năm 2009, mối quan hệ giữa cộng đồng phát triển và đơn vị sở hữu dự án trở nên căng thẳng. Năm 2010, một nhóm thành viên quan trọng của cộng đồng OpenOffice.org đã thành lập The Document Foundation (TDF) và tạo ra một nhánh mới có tên LibreOffice.
+
+   
 2. Nguyên nhân dẫn đến việc rẽ nhánh: <br>
-   Nguyên nhân chính không chỉ liên quan đến mã nguồn mà còn đến quyền quản trị, mức độ độc lập và vai trò của cộng đồng. Sau khi Oracle tiếp quản Sun Microsystems, một bộ phận cộng đồng lo ngại về định hướng phát triển và mô hình quản trị của OpenOffice.org. Những người khởi xướng LibreOffice muốn xây dựng một tổ chức độc lập, minh bạch và có sự tham gia rộng rãi hơn của cộng đồng. <br>
+   Nguyên nhân chính không chỉ liên quan đến mã nguồn mà còn đến quyền quản trị, mức độ độc lập và vai trò của cộng đồng. Sau khi Oracle tiếp quản Sun Microsystems, một bộ phận cộng đồng lo ngại về định hướng phát triển và mô hình quản trị của OpenOffice.org. Những người khởi xướng LibreOffice muốn xây dựng một tổ chức độc lập, minh bạch và có sự tham gia rộng rãi hơn của cộng đồng.
+
+   
    Mâu thuẫn rõ ràng hơn khi một số thành viên của The Document Foundation vẫn giữ vai trò trong OpenOffice.org Community Council. Phía Oracle cho rằng điều này có thể tạo ra xung đột lợi ích và yêu cầu một số thành viên rời khỏi Community Council. Sự khác biệt về quyền kiểm soát và định hướng phát triển góp phần dẫn đến quyết định rẽ nhánh.
+
+   
 3. Quá trình fork và sự hình thành LibreOffice: <br>
    Ngày 28/09/2010, The Document Foundation chính thức được công bố cùng với LibreOffice, một fork của OpenOffice.org. Nhiều nhà phát triển và tổ chức trong cộng đồng phần mềm tự do đã chuyển sang hoặc ủng hộ dự án mới. LibreOffice được định hướng phát triển theo mô hình cộng đồng và độc lập hơn về quản trị.
+
+   
    Đến năm 2011, Oracle chuyển mã nguồn và thương hiệu OpenOffice.org cho Apache Software Foundation. Dự án tiếp tục tồn tại dưới tên Apache OpenOffice, trong khi LibreOffice được phát triển độc lập bởi The Document Foundation. Từ một dự án ban đầu, hai dự án đã hình thành với những hướng phát triển và cộng đồng riêng.
+
+   
 4. Phân tích nguyên nhân thành công của fork: <br>
-   Trường hợp này cho thấy một fork có thể trở thành dự án lâu dài khi có cộng đồng, nhà phát triển và mô hình quản trị phù hợp. LibreOffice không chỉ tiếp tục sử dụng mã nguồn của OpenOffice.org mà còn xây dựng một tổ chức mới để điều phối dự án. The Document Foundation chú trọng tính độc lập và sự tham gia của cộng đồng, tạo điều kiện để các nhà phát triển tiếp tục đóng góp. <br>
+   Trường hợp này cho thấy một fork có thể trở thành dự án lâu dài khi có cộng đồng, nhà phát triển và mô hình quản trị phù hợp. LibreOffice không chỉ tiếp tục sử dụng mã nguồn của OpenOffice.org mà còn xây dựng một tổ chức mới để điều phối dự án. The Document Foundation chú trọng tính độc lập và sự tham gia của cộng đồng, tạo điều kiện để các nhà phát triển tiếp tục đóng góp.
+
+   
    Qua trường hợp này có thể thấy, mã nguồn mở không có nghĩa là mọi thành viên luôn thống nhất. Khi quyền sở hữu, quyền ra quyết định và lợi ích của doanh nghiệp khác với kỳ vọng của cộng đồng, xung đột có thể xuất hiện. Giấy phép mã nguồn mở cho phép mã nguồn tiếp tục được sử dụng và phát triển theo các điều kiện của giấy phép, tạo cơ sở cho việc hình thành fork.
+
+   
 5. Bài học rút ra: <br>
-   Trường hợp OpenOffice.org và LibreOffice cho thấy quản trị cộng đồng quan trọng không kém chất lượng mã nguồn. Một dự án mã nguồn mở muốn phát triển lâu dài cần có cơ chế ra quyết định minh bạch, vai trò rõ ràng giữa doanh nghiệp và cộng đồng, đồng thời có phương thức giải quyết xung đột hiệu quả. <br>
+   Trường hợp OpenOffice.org và LibreOffice cho thấy quản trị cộng đồng quan trọng không kém chất lượng mã nguồn. Một dự án mã nguồn mở muốn phát triển lâu dài cần có cơ chế ra quyết định minh bạch, vai trò rõ ràng giữa doanh nghiệp và cộng đồng, đồng thời có phương thức giải quyết xung đột hiệu quả.
+
+   
    Fork không nhất thiết chỉ là dấu hiệu của thất bại. Trong trường hợp LibreOffice, fork xuất phát từ những bất đồng về quản trị và định hướng phát triển, đồng thời tạo ra một dự án mới với mô hình tổ chức khác. Qua đó, có thể thấy governance, quyền kiểm soát và vai trò của cộng đồng có ảnh hưởng lớn đến sự phát triển lâu dài của một dự án mã nguồn mở.

@@ -6,6 +6,6 @@ Tôi muốn học về phần mềm mã nguồn mở vì: đây là một lĩnh 
 - 5 phần mềm mã nguồn mở tôi sử dụng hằng ngày:
     - LibreOffice: giấy phép - MPL 2.0
     - Python: giấy phép - Python Software Foundation
-    - Notepad++: giấy phép - GNU GPL 3.0
+    - Notepad++: giấy phép - GPL 3.0
     - MySQL Community Edition: giấy phép - GPL 2.0 
     - Git: giấy phép - GPL 2.0

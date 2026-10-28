@@ -1,0 +1,90 @@
+{% extends "base.html" %} {% block title %}Bài 2 - Tính điểm học phần{% endblock
+%} {% block styles %} {{ super() }}
+<style>
+  .grade-card {
+    max-width: 550px;
+    margin: 0 auto;
+    border-radius: 1rem;
+  }
+  .error-text {
+    color: #dc3545;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+  }
+</style>
+{% endblock %} {% block content %}
+<div class="container py-4">
+  <div class="card grade-card shadow-sm border-0">
+    <div class="card-body p-4">
+      <h2 class="h4 text-center fw-bold mb-4 text-primary">
+        TÍNH ĐIỂM HỌC PHẦN
+      </h2>
+
+      <form action="" method="POST">
+        <!-- Điểm chuyên cần (10%) -->
+        <div class="mb-3">
+          <label class="form-label fw-semibold">Điểm chuyên cần (10%):</label>
+          <input
+            type="text"
+            class="form-control {% if err_dcc %}is-invalid{% endif %}"
+            name="dcc"
+            value="{{ dcc_raw or '' }}"
+            placeholder="Nhập điểm từ 0 - 10"
+          />
+          {% if err_dcc %}
+          <div class="error-text">{{ err_dcc }}</div>
+          {% endif %}
+        </div>
+
+        <!-- Điểm giữa kỳ (30%) -->
+        <div class="mb-3">
+          <label class="form-label fw-semibold">Điểm giữa kỳ (30%):</label>
+          <input
+            type="text"
+            class="form-control {% if err_dgk %}is-invalid{% endif %}"
+            name="dgk"
+            value="{{ dgk_raw or '' }}"
+            placeholder="Nhập điểm từ 0 - 10"
+          />
+          {% if err_dgk %}
+          <div class="error-text">{{ err_dgk }}</div>
+          {% endif %}
+        </div>
+
+        <!-- Điểm cuối kỳ (60%) -->
+        <div class="mb-3">
+          <label class="form-label fw-semibold">Điểm cuối kỳ (60%):</label>
+          <input
+            type="text"
+            class="form-control {% if err_dck %}is-invalid{% endif %}"
+            name="dck"
+            value="{{ dck_raw or '' }}"
+            placeholder="Nhập điểm từ 0 - 10"
+          />
+          {% if err_dck %}
+          <div class="error-text">{{ err_dck }}</div>
+          {% endif %}
+        </div>
+
+        <div class="d-grid gap-2 mt-4">
+          <button type="submit" class="btn btn-primary fw-bold">
+            Tính điểm
+          </button>
+        </div>
+      </form>
+
+      <!-- Kết quả tính toán -->
+      {% if result_text %}
+      <div
+        class="alert {{ alert_class }} mt-4 mb-0 text-center fw-bold fs-5"
+        role="alert"
+      >
+        {{ result_text }} {% if sub_text %}
+        <br /><span class="fs-6 fw-normal">{{ sub_text }}</span>
+        {% endif %}
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

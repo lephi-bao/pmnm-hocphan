@@ -1,0 +1,92 @@
+{% extends "base.html" %} {% block title %}Bài 1 - Máy tính cơ bản{%
+endblock %} {% block styles %} {{ super() }}
+<style>
+  .calculator-card {
+    max-width: 500px;
+    margin: 0 auto;
+    border-radius: 1rem;
+  }
+
+  .error-text {
+    color: #dc3545;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+  }
+</style>
+{% endblock %} {% block content %}
+<div class="container py-4">
+  <div class="card calculator-card shadow-sm border-0">
+    <div class="card-body p-4">
+      <h2 class="h4 text-center fw-bold mb-4 text-primary">MÁY TÍNH CƠ BẢN</h2>
+
+      <form action="" method="POST">
+        <!-- Số thứ nhất a -->
+        <div class="mb-3">
+          <label class="form-label fw-semibold"> Số thứ nhất (a): </label>
+
+          <input
+            type="text"
+            class="form-control {% if err_a %}is-invalid{% endif %}"
+            name="a"
+            value="{{ a_raw or '' }}"
+          />
+
+          {% if err_a %}
+          <div class="error-text">{{ err_a }}</div>
+          {% endif %}
+        </div>
+
+        <!-- Phép toán op -->
+        <div class="mb-3">
+          <label class="form-label fw-semibold"> Phép toán (op): </label>
+
+          <select
+            class="form-select {% if err_op %}is-invalid{% endif %}"
+            name="op"
+          >
+            <option value="+" {% if op == "+" %}selected{% endif %}>+</option>
+            <option value="-" {% if op =="-" %}selected{% endif %}>-</option>
+            <option value="*" {% if op =="*" %}selected{% endif %}>*</option>
+            <option value="/" {% if op =="/" %}selected{% endif %}>/</option>
+          </select>
+
+          {% if err_op %}
+          <div class="error-text">{{ err_op }}</div>
+          {% endif %}
+        </div>
+
+        <!-- Số thứ hai b -->
+        <div class="mb-3">
+          <label class="form-label fw-semibold"> Số thứ hai (b): </label>
+
+          <input
+            type="text"
+            class="form-control {% if err_b %}is-invalid{% endif %}"
+            name="b"
+            value="{{ b_raw or '' }}"
+          />
+
+          {% if err_b %}
+          <div class="error-text">{{ err_b }}</div>
+          {% endif %}
+        </div>
+
+        <!-- Nút tính -->
+        <div class="d-grid gap-2 mt-4">
+          <button type="submit" class="btn btn-primary fw-bold">Tính</button>
+        </div>
+      </form>
+
+      <!-- Kết quả -->
+      {% if result %}
+      <div
+        class="alert alert-success mt-4 text-center mb-0 fw-bold fs-5"
+        role="alert"
+      >
+        Kết quả: {{ result }}
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %} ```

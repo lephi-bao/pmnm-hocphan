@@ -1,0 +1,106 @@
+<!doctype html>
+
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tính toán hai số</title>
+
+    <style>
+      body {
+        background-color: #f2f2f2;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+      }
+
+      .container {
+        width: 400px;
+        background-color: white;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px #ccc;
+      }
+
+      h1 {
+        text-align: center;
+        color: #333;
+      }
+
+      .input-group {
+        margin-bottom: 15px;
+      }
+
+      label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: bold;
+      }
+
+      input {
+        width: 100%;
+        padding: 10px;
+        box-sizing: border-box;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+      }
+
+      button {
+        width: 100%;
+        padding: 10px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+      }
+
+      button:hover {
+        background-color: #0056b3;
+      }
+
+      .result {
+        margin-top: 20px;
+        padding: 15px;
+        background-color: #f8f9fa;
+        border-radius: 5px;
+      }
+
+      .result p {
+        margin: 8px 0;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container">
+      <h1>Phép toán cơ bản</h1>
+
+      <form method="post">
+        <div class="input-group">
+          <label for="a">Số a:</label>
+          <input type="number" step="any" name="a" id="a" value="{{a}}" />
+        </div>
+
+        <div class="input-group">
+          <label for="b">Số b:</label>
+          <input type="number" step="any" name="b" id="b" value="{{b}}" />
+        </div>
+
+        <button type="submit">OK</button>
+      </form>
+
+      <div class="ketQua">
+        <h3>Kết quả</h3>
+        <ul>
+          <li>{{a}} + {{b}} = {{ketQua.cong}}</li>
+          <li>{{a}} - {{b}} = {{ketQua.tru}}</li>
+          <li>{{a}} * {{b}} = {{ketQua.nhan}}</li>
+          <li>{{a}} / {{b}} = {{ketQua.chia}}</li>
+        </ul>
+      </div>
+    </div>
+  </body>
+</html>

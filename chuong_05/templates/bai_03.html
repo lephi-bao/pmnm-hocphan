@@ -1,0 +1,73 @@
+{% extends "base.html" %} {% block title %}Bài 3 - Tính chỉ số BMI{% endblock %}
+{% block styles %} {{ super() }}
+<style>
+  .bmi-card {
+    max-width: 550px;
+    margin: 0 auto;
+    border-radius: 1rem;
+  }
+  .error-text {
+    color: #dc3545;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+  }
+</style>
+{% endblock %} {% block content %}
+<div class="container py-4">
+  <div class="card bmi-card shadow-sm border-0">
+    <div class="card-body p-4">
+      <h2 class="h4 text-center fw-bold mb-4 text-primary">TÍNH CHỈ SỐ BMI</h2>
+
+      <form action="" method="POST">
+        <!-- Chiều cao (cm) -->
+        <div class="mb-3">
+          <label class="form-label fw-semibold">Chiều cao (cm):</label>
+          <input
+            type="text"
+            class="form-control {% if err_height %}is-invalid{% endif %}"
+            name="height"
+            value="{{ height_raw or '' }}"
+            placeholder="Ví dụ: 170"
+          />
+          {% if err_height %}
+          <div class="error-text">{{ err_height }}</div>
+          {% endif %}
+        </div>
+
+        <!-- Cân nặng (kg) -->
+        <div class="mb-3">
+          <label class="form-label fw-semibold">Cân nặng (kg):</label>
+          <input
+            type="text"
+            class="form-control {% if err_weight %}is-invalid{% endif %}"
+            name="weight"
+            value="{{ weight_raw or '' }}"
+            placeholder="Ví dụ: 65,5"
+          />
+          {% if err_weight %}
+          <div class="error-text">{{ err_weight }}</div>
+          {% endif %}
+        </div>
+
+        <div class="d-grid gap-2 mt-4">
+          <button type="submit" class="btn btn-primary fw-bold">
+            Tính BMI
+          </button>
+        </div>
+      </form>
+
+      <!-- Hiển thị kết quả -->
+      {% if bmi_value %}
+      <div
+        class="alert {{ alert_class }} mt-4 text-center mb-0 fw-bold fs-5"
+        role="alert"
+      >
+        {{ bmi_value }} - {{ category }} {% if ideal_weight %}
+        <br /><span class="fs-6 fw-normal">({{ ideal_weight }})</span>
+        {% endif %}
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Danh sách sinh viên</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 30px;
+      }
+      h2 {
+        text-align: center;
+        color: #333;
+      }
+      table {
+        width: 80%;
+        margin: 20px auto;
+        border-collapse: collapse;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+      th,
+      td {
+        border: 1px solid #ddd;
+        padding: 12px;
+        text-align: center;
+      }
+      th {
+        background-color: black;
+        color: white;
+      }
+      tr:nth-child(even) {
+        background-color: #f8f9fa;
+      }
+      tr:hover {
+        background-color: #e9ecef;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>DANH SÁCH SINH VIÊN</h2>
+
+    <table>
+      <thead>
+        <tr>
+          <th>STT</th>
+          <th>MSSV</th>
+          <th>Họ và Tên</th>
+          <th>Điểm GPA</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for sv in ds_sinh_vien %}
+        <tr>
+          <td>{{ loop.index }}</td>
+          <td>{{ sv.mssv }}</td>
+          <td>{{ sv.name }}</td>
+          <td>{{ "%.2f"|format(sv.gpa) }}</td>
+        </tr>
+        {% else %}
+        <tr>
+          <td colspan="4">Không tìm thấy sinh viên nào trong CSDL!</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </body>
+</html>

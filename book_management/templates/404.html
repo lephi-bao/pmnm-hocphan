@@ -1,0 +1,13 @@
+{% extends "base.html" %} {% block title %}Không tìm thấy{% endblock %} {% block
+page_heading %}Không tìm thấy trang{% endblock %} {% block content %}
+<div class="card">
+  <div class="empty-state py-5">
+    <div class="display-1 fw-bold" style="color: #c7d2fe">404</div>
+    <h5 class="fw-bold text-dark">Trang bạn tìm không tồn tại</h5>
+    <p>Đường dẫn có thể đã bị đổi hoặc dữ liệu đã bị xoá.</p>
+    <a href="/" class="btn btn-primary"
+      ><i class="bi bi-house-door me-1"></i> Quay về trang chủ</a
+    >
+  </div>
+</div>
+{% endblock %}

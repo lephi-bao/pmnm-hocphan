@@ -1,0 +1,115 @@
+{% extends "base.html" %} {% from "_macros.html" import render_empty_state %} {%
+block content %}
+<div
+  class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4"
+>
+  <div>
+    <h2 class="fw-bold text-dark mb-1">Quản lý Sách</h2>
+  </div>
+  <a
+    href="/books/add"
+    class="btn btn-success rounded-pill px-4 shadow-sm fw-semibold"
+  >
+    Thêm Sách Mới
+  </a>
+</div>
+
+<div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+  <div class="card-body p-0">
+    {% if books %}
+    <div class="table-responsive">
+      <table class="table table-hover align-middle mb-0">
+        <thead class="table-dark">
+          <tr>
+            <th class="ps-4 py-3">Tựa Sách</th>
+            <th class="py-3">Tác Giả</th>
+            <th class="py-3">Danh Mục</th>
+            <th class="py-3">Giá Bán</th>
+            <th class="py-3 text-center">Tồn Kho</th>
+            <th class="py-3 text-center">Năm XB</th>
+            <th class="text-end pe-4 py-3">Thao Tác</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for book in books %}
+          <tr class="clickable-row" data-href="/books/{{ book.id }}">
+            <td class="ps-4">
+              <a
+                href="/books/{{ book.id }}"
+                class="fw-bold text-dark text-decoration-none d-block"
+              >
+                {{ book.title }}
+              </a>
+              {% if book.description %}
+              <small
+                class="text-muted d-inline-block text-truncate"
+                style="max-width: 240px"
+              >
+                {{ book.description }}
+              </small>
+              {% endif %}
+            </td>
+            <td class="text-secondary">{{ book.author }}</td>
+            <td>
+              <span
+                class="badge bg-info bg-opacity-10 text-dark border border-info border-opacity-25 rounded-pill px-3 py-1"
+              >
+                {{ book.category.name if book.category else 'Chưa phân loại' }}
+              </span>
+            </td>
+            <td class="fw-bold text-danger">
+              {{ "{:,.0f}".format(book.price) }} ₫
+            </td>
+            <td class="text-center">
+              {% if book.quantity == 0 %}
+              <span class="badge bg-danger rounded-pill px-2">Hết hàng</span>
+              {% elif book.quantity <= 5 %}
+              <span class="badge bg-warning text-dark rounded-pill px-2"
+                >Còn {{ book.quantity }}</span
+              >
+              {% else %}
+              <span
+                class="badge bg-success bg-opacity-10 text-success rounded-pill px-3 fw-bold"
+                >{{ book.quantity }}</span
+              >
+              {% endif %}
+            </td>
+            <td class="text-center text-muted">
+              {{ book.publish_year or '—' }}
+            </td>
+            <td class="text-end pe-4">
+              <div class="d-inline-flex gap-2">
+                <a
+                  href="/books/edit/{{ book.id }}"
+                  class="btn btn-sm btn-outline-warning text-dark rounded-3"
+                  title="Sửa sách"
+                >
+                  <i class="bi bi-pencil-square"></i>
+                </a>
+                <form
+                  action="/books/delete/{{ book.id }}"
+                  method="POST"
+                  class="d-inline"
+                  onsubmit="return confirm('Bạn có chắc chắn muốn xóa cuốn sách [{{ book.title }}]?');"
+                >
+                  <button
+                    type="submit"
+                    class="btn btn-sm btn-outline-danger rounded-3"
+                    title="Xóa sách"
+                  >
+                    <i class="bi bi-trash"></i>
+                  </button>
+                </form>
+              </div>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %} {{ render_empty_state( 'bi-journal-x', 'Kho sách đang trống',
+    'Chưa có cuốn sách nào được thêm vào hệ thống. Hãy thêm sách ngay!',
+    '/books/add', 'Thêm Sách Đầu Tiên', 'btn-success' ) }} {% endif %}
+  </div>
+</div>
+{% endblock %}

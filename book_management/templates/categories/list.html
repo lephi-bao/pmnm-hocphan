@@ -1,0 +1,85 @@
+{% extends "base.html" %} {% from "_macros.html" import render_empty_state %} {%
+block content %}
+<div
+  class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4"
+>
+  <div>
+    <h2 class="fw-bold text-dark mb-1">Quản lý Danh Mục</h2>
+  </div>
+  <a
+    href="/categories/add"
+    class="btn btn-primary rounded-pill px-4 shadow-sm fw-semibold"
+  >
+    Thêm Danh Mục Mới
+  </a>
+</div>
+
+<div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+  <div class="card-body p-0">
+    {% if categories %}
+    <div class="table-responsive">
+      <table class="table table-hover align-middle mb-0">
+        <thead class="table-dark">
+          <tr>
+            <th class="ps-4 py-3">Tên Danh Mục</th>
+            <th class="py-3">Mô Tả</th>
+            <th class="py-3" style="width: 150px">Ngày Tạo</th>
+            <th class="text-end pe-4 py-3" style="width: 180px">Thao Tác</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for cat in categories %}
+          <tr class="clickable-row" data-href="/categories/{{ cat.id }}">
+            <td class="ps-4">
+              <a
+                href="/categories/{{ cat.id }}"
+                class="fw-bold text-dark text-decoration-none"
+              >
+                {{ cat.name }}
+              </a>
+              <span
+                class="badge bg-primary bg-opacity-10 text-primary rounded-pill ms-2"
+              >
+                {{ cat.books|length }} sách
+              </span>
+            </td>
+            <td class="text-muted">{{ cat.description or '—' }}</td>
+            <td class="text-muted small">
+              {{cat.created_at.strftime('%d/%m/%Y') }}
+            </td>
+            <td class="text-end pe-4">
+              <div class="d-inline-flex gap-2">
+                <a
+                  href="/categories/edit/{{ cat.id }}"
+                  class="btn btn-sm btn-outline-warning text-dark rounded-3"
+                  title="Chỉnh sửa"
+                >
+                  <i class="bi bi-pencil-square"></i>
+                </a>
+                <form
+                  action="/categories/delete/{{ cat.id }}"
+                  method="POST"
+                  class="d-inline"
+                  onsubmit="return confirm('Xóa danh mục [{{ cat.name }}] sẽ xóa TOÀN BỘ sách thuộc danh mục này. Tiếp tục?');"
+                >
+                  <button
+                    type="submit"
+                    class="btn btn-sm btn-outline-danger rounded-3"
+                    title="Xóa"
+                  >
+                    <i class="bi bi-trash"></i>
+                  </button>
+                </form>
+              </div>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %} {{ render_empty_state( 'bi-tags', 'Chưa có danh mục nào', 'Hãy
+    tạo danh mục đầu tiên để bắt đầu phân loại kho sách của bạn.',
+    '/categories/add', 'Thêm Danh Mục Mới', 'btn-primary' ) }} {% endif %}
+  </div>
+</div>
+{% endblock %}

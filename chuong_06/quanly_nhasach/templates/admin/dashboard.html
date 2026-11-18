@@ -1,0 +1,136 @@
+{% extends "admin/base_admin.html" %} {% block title %}Tổng quan · Quản trị Nhà
+sách Sông Hương{% endblock %} {% block content %}
+<h4 class="fw-bold mb-4">Tổng quan</h4>
+
+<div class="row g-3 mb-4">
+  <div class="col-md-3">
+    <div class="card border-0 shadow-sm p-3">
+      <small class="text-muted">Đầu sách</small>
+      <h2 class="fw-bold mb-0 mt-1">{{ total_books }}</h2>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="card border-0 shadow-sm p-3">
+      <small class="text-muted">Đơn chờ xác nhận</small>
+      <h2 class="fw-bold text-warning mb-0 mt-1">{{ pending_orders }}</h2>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="card border-0 shadow-sm p-3">
+      <small class="text-muted">Doanh thu tháng {{ current_month }}</small>
+      <h3 class="fw-bold text-success mb-0 mt-1">
+        {{ monthly_revenue | vnd }}
+      </h3>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="card border-0 shadow-sm p-3">
+      <small class="text-muted">Sắp hết hàng</small>
+      <h2 class="fw-bold text-danger mb-0 mt-1">{{ low_stock_count }}</h2>
+    </div>
+  </div>
+</div>
+
+<div class="row g-4">
+  <div class="col-lg-8">
+    <div class="card border-0 shadow-sm p-3">
+      <h6 class="fw-bold mb-3">Đơn hàng mới nhất</h6>
+      <div class="table-responsive">
+        <table class="table table-hover align-middle mb-2">
+          <thead class="table-light">
+            <tr>
+              <th>Mã</th>
+              <th>Khách hàng</th>
+              <th>Tổng tiền</th>
+              <th>Trạng thái</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for order in latest_orders %}
+            <tr
+              style="cursor: pointer"
+              onclick="window.location='{{ url_for('admin_order_detail', order_id=order.id) }}'"
+            >
+              <td class="fw-semibold">#{{ order.id }}</td>
+              <td>{{ order.customer_name }}</td>
+              <td>{{ order.total_amount | vnd }}</td>
+              <td>
+                <span
+                  class="badge rounded-pill {% if order.status == 'Chờ xác nhận' %}status-pending {% elif order.status == 'Đang giao' %}status-shipping {% elif order.status == 'Hoàn tất' %}status-completed {% else %}status-cancelled{% endif %}"
+                >
+                  {{ order.status }}
+                </span>
+              </td>
+            </tr>
+            {% else %}
+            <tr>
+              <td colspan="4" class="text-center text-muted py-3">
+                Chưa có đơn hàng nào.
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      <a href="{{ url_for('admin_orders') }}" class="small text-decoration-none"
+        >Xem tất cả đơn hàng →</a
+      >
+    </div>
+  </div>
+
+  <div class="col-lg-4">
+    <div class="card border-0 shadow-sm p-3 mb-4">
+      <h6 class="fw-bold mb-3">Sắp hết hàng (≤ 5)</h6>
+      {% if low_stock_books %}
+      <ul class="list-unstyled mb-3">
+        {% for book in low_stock_books %}
+        <li
+          class="d-flex justify-content-between align-items-center py-1 border-bottom"
+        >
+          <a
+            href="{{ url_for('admin_book_edit', book_id=book.id) }}"
+            class="text-dark text-decoration-none"
+          >
+            {{ book.title }}
+          </a>
+          <span class="fw-bold text-danger">{{ book.stock }}</span>
+        </li>
+        {% endfor %}
+      </ul>
+      {% else %}
+      <p class="text-muted small mb-3">Không có sách nào sắp hết hàng.</p>
+      {% endif %}
+      <a
+        href="{{ url_for('admin_books', stock='low_stock') }}"
+        class="small text-decoration-none"
+        >Nhập thêm sách →</a
+      >
+    </div>
+
+    <div class="card border-0 shadow-sm p-3">
+      <h6 class="fw-bold mb-3">Doanh thu 7 ngày</h6>
+      {% set ns = namespace(max_amt=1) %} {% for day in revenue_7_days %} {% if
+      day.amount > ns.max_amt %}{% set ns.max_amt = day.amount %}{% endif %} {%
+      endfor %}
+      <div
+        class="d-flex align-items-end justify-content-between gap-2"
+        style="height: 110px"
+      >
+        {% for day in revenue_7_days %} {% set pct = ((day.amount / ns.max_amt)
+        * 100) | int %}
+        <div class="text-center flex-fill">
+          <div
+            class="bg-primary rounded-top mx-auto"
+            title="{{ day.date }}: {{ day.amount | vnd }}"
+            style="width: 22px; height: {{ pct if pct > 8 else 8 }}px; opacity: {{ '1' if loop.last else '0.55' }};"
+          ></div>
+          <small class="text-muted d-block mt-1" style="font-size: 0.7rem"
+            >{{ day.date }}</small
+          >
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,157 @@
+{% extends "admin/base_admin.html" %} {% block title %}Đơn hàng #{{ order.id }}
+· Quản trị{% endblock %} {% block content %}
+<nav aria-label="breadcrumb" class="mb-2">
+  <ol class="breadcrumb small">
+    <li class="breadcrumb-item">
+      <a href="{{ url_for('admin_orders') }}" class="text-decoration-none"
+        >Đơn hàng</a
+      >
+    </li>
+    <li class="breadcrumb-item active">#{{ order.id }}</li>
+  </ol>
+</nav>
+
+<h4 class="fw-bold mb-4">
+  Đơn hàng #{{ order.id }} · {{ order.created_at.strftime('%d/%m/%Y %H:%M') }}
+</h4>
+
+<div class="row g-4">
+  <div class="col-lg-8">
+    <div class="card border-0 shadow-sm p-3 mb-4 bg-light">
+      <h6 class="fw-bold mb-2">Khách hàng</h6>
+      <p class="mb-1">{{ order.customer_name }} · {{ order.customer_phone }}</p>
+      <p class="mb-1">{{ order.shipping_address }}</p>
+      <p class="mb-1">Thanh toán: {{ order.payment_method }}</p>
+      {% if order.note %}
+      <small class="text-muted">Ghi chú: {{ order.note }}</small>
+      {% endif %}
+    </div>
+
+    <div class="card border-0 shadow-sm p-3">
+      <table class="table align-middle mb-2">
+        <thead class="table-light">
+          <tr>
+            <th>Sách</th>
+            <th>Đơn giá</th>
+            <th>SL</th>
+            <th class="text-end">Thành tiền</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in order.items %}
+          <tr>
+            <td>{{ item.book.title }}</td>
+            <td>{{ "{:,}".format(item.unit_price).replace(",", ".") }}</td>
+            <td>{{ item.quantity }}</td>
+            <td class="text-end">
+              {{ "{:,}".format(item.line_total).replace(",", ".") }}
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+
+      <div class="d-flex justify-content-end">
+        <div style="width: 240px">
+          <div class="d-flex justify-content-between mb-1">
+            <span class="text-muted">Phí giao hàng</span>
+            <span
+              class="{% if order.shipping_fee == 0 %}text-success fw-medium{% endif %}"
+            >
+              {{ "Miễn phí" if order.shipping_fee == 0 else (order.shipping_fee
+              | vnd) }}
+            </span>
+          </div>
+          <div
+            class="d-flex justify-content-between align-items-center pt-2 border-top"
+          >
+            <span class="fw-bold">Tổng cộng</span>
+            <span class="price-text fs-5">{{ order.total_amount | vnd }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <small class="text-muted d-block mt-2"
+      >Đơn giá là giá tại thời điểm đặt (OrderItem.unit_price)</small
+    >
+  </div>
+
+  <div class="col-lg-4">
+    <div class="card border-0 shadow-sm p-3 mb-4">
+      <h6 class="fw-bold mb-2">Trạng thái</h6>
+      <div class="mb-3">
+        <span
+          class="badge rounded-pill px-3 py-2 {% if order.status == 'Chờ xác nhận' %}status-pending {% elif order.status == 'Đang giao' %}status-shipping {% elif order.status == 'Hoàn tất' %}status-completed {% else %}status-cancelled{% endif %}"
+        >
+          {{ order.status }}
+        </span>
+      </div>
+
+      {% if not order.is_final_status %} {% set forward_statuses =
+      order.allowed_next_statuses | reject('equalto', 'Đã huỷ') | list %} {% if
+      forward_statuses %}
+      <form
+        method="post"
+        action="{{ url_for('admin_order_update_status', order_id=order.id) }}"
+        class="mb-2"
+      >
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+        <label class="form-label small text-muted">Chuyển sang</label>
+        <select name="status" class="form-select mb-2">
+          {% for st in forward_statuses %}
+          <option value="{{ st }}">{{ st }}</option>
+          {% endfor %}
+        </select>
+        <div class="d-grid">
+          <button type="submit" class="btn btn-primary">Cập nhật</button>
+        </div>
+      </form>
+      {% endif %} {% if 'Đã huỷ' in order.allowed_next_statuses %}
+      <form
+        method="post"
+        action="{{ url_for('admin_order_update_status', order_id=order.id) }}"
+        onsubmit="return confirm('Xác nhận huỷ đơn hàng #{{ order.id }} và hoàn lại tồn kho?');"
+      >
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+        <input type="hidden" name="status" value="Đã huỷ" />
+        <div class="d-grid">
+          <button type="submit" class="btn btn-outline-danger">Huỷ đơn</button>
+        </div>
+      </form>
+      {% endif %} {% endif %}
+    </div>
+
+    <div class="card border-0 shadow-sm p-3 bg-light">
+      <h6 class="fw-bold mb-3">Lịch sử</h6>
+      <ul class="list-unstyled small mb-0">
+        <li class="mb-2 text-primary fw-medium">
+          ● {{ order.created_at.strftime('%d/%m %H:%M') }} - Đặt hàng
+        </li>
+        {% if order.status == 'Đã huỷ' %} {% if order.shipped_at %}
+        <li class="mb-2 text-primary">
+          ● {{ order.shipped_at.strftime('%d/%m %H:%M') }} - Đang giao
+        </li>
+        {% endif %}
+        <li class="text-danger fw-medium">
+          ● {{ order.cancelled_at.strftime('%d/%m %H:%M') if order.cancelled_at
+          else '' }} - Đã huỷ
+        </li>
+        {% else %}
+        <li
+          class="mb-2 {% if order.shipped_at %}text-primary fw-medium{% else %}text-muted{% endif %}"
+        >
+          ● {% if order.shipped_at %}{{ order.shipped_at.strftime('%d/%m %H:%M')
+          }} - {% endif %}Đang giao
+        </li>
+        <li
+          class="{% if order.completed_at %}text-success fw-medium{% else %}text-muted{% endif %}"
+        >
+          ● {% if order.completed_at %}{{ order.completed_at.strftime('%d/%m
+          %H:%M') }} - {% endif %}Hoàn tất
+        </li>
+        {% endif %}
+      </ul>
+    </div>
+  </div>
+</div>
+{% endblock %}

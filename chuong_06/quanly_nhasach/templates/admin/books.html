@@ -1,0 +1,156 @@
+{% extends "admin/base_admin.html" %} {% block title %}Quản lý sách · Quản trị{%
+endblock %} {% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h4 class="fw-bold mb-0">Sách ({{ pagination.total }})</h4>
+  <a href="{{ url_for('admin_book_create') }}" class="btn btn-primary"
+    >+ Thêm sách</a
+  >
+</div>
+
+<form method="get" action="{{ url_for('admin_books') }}" class="row g-2 mb-4">
+  <div class="col-md-5">
+    <input
+      type="text"
+      name="q"
+      value="{{ q }}"
+      class="form-control"
+      placeholder="Tìm tên sách, tác giả..."
+    />
+  </div>
+  <div class="col-md-3">
+    <select name="category_id" class="form-select">
+      <option value="">Mọi danh mục</option>
+      {% for cat in categories %} {% if selected_category == cat.id %}
+      <option value="{{ cat.id }}" selected>{{ cat.name }}</option>
+      {% else %}
+      <option value="{{ cat.id }}">{{ cat.name }}</option>
+      {% endif %} {% endfor %}
+    </select>
+  </div>
+  <div class="col-md-3">
+    <select name="stock" class="form-select">
+      <option value="">Tồn kho</option>
+      {% if stock_filter == 'in_stock' %}
+      <option value="in_stock" selected>Còn hàng</option>
+      {% else %}
+      <option value="in_stock">Còn hàng</option>
+      {% endif %} {% if stock_filter == 'low_stock' %}
+      <option value="low_stock" selected>Sắp hết ≤ 5</option>
+      {% else %}
+      <option value="low_stock">Sắp hết ≤ 5</option>
+      {% endif %} {% if stock_filter == 'out_of_stock' %}
+      <option value="out_of_stock" selected>Hết hàng</option>
+      {% else %}
+      <option value="out_of_stock">Hết hàng</option>
+      {% endif %}
+    </select>
+  </div>
+  <div class="col-md-1 d-grid">
+    <button type="submit" class="btn btn-outline-primary">Lọc</button>
+  </div>
+</form>
+
+<div class="card border-0 shadow-sm mb-3">
+  <div class="table-responsive">
+    <table class="table align-middle mb-0">
+      <thead class="table-light">
+        <tr>
+          <th style="width: 60px"></th>
+          <th>Tên sách / Tác giả</th>
+          <th>Danh mục</th>
+          <th>Giá</th>
+          <th>Tồn</th>
+          <th>Thao tác</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for book in books %}
+        <tr>
+          <td>
+            {% if book.cover_image %}
+            <img
+              src="{{ url_for('static', filename='uploads/' + book.cover_image) }}"
+              class="rounded"
+              style="width: 40px; height: 52px; object-fit: cover"
+            />
+            {% else %}
+            <div
+              class="bg-light border rounded d-flex align-items-center justify-content-center"
+              style="width: 40px; height: 52px"
+            >
+              <i class="bi bi-book text-muted"></i>
+            </div>
+            {% endif %}
+          </td>
+          <td>
+            <div class="fw-semibold">{{ book.title }}</div>
+            <small class="text-muted">{{ book.author }}</small>
+          </td>
+          <td>{{ book.category.name }}</td>
+          <td>{{ "{:,}".format(book.price).replace(",", ".") }}</td>
+          <td class="fw-bold {{ 'text-danger' if book.stock == 0 else '' }}">
+            {{ book.stock }}
+          </td>
+          <td>
+            <div class="d-flex align-items-center gap-2">
+              <a
+                href="{{ url_for('admin_book_edit', book_id=book.id) }}"
+                class="text-decoration-none small"
+                >Sửa</a
+              >
+              <form
+                method="post"
+                action="{{ url_for('admin_book_delete', book_id=book.id) }}"
+                onsubmit="return confirm('Bạn có chắc chắn muốn xoá sách {{ book.title }}?');"
+              >
+                <input
+                  type="hidden"
+                  name="csrf_token"
+                  value="{{ csrf_token() }}"
+                />
+                <button
+                  type="submit"
+                  class="btn btn-link p-0 text-decoration-none small {{ 'text-danger' if book.is_deletable else 'text-muted opacity-50' }}"
+                >
+                  Xoá
+                </button>
+              </form>
+            </div>
+          </td>
+        </tr>
+        {% else %}
+        <tr>
+          <td colspan="6" class="text-center text-muted py-4">
+            Không tìm thấy sách nào.
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+{% if pagination.total > 0 %} {% set start_idx = (pagination.page - 1) *
+pagination.per_page + 1 %} {% set end_idx = start_idx + (books | length) - 1 %}
+<div class="d-flex justify-content-between align-items-center">
+  <small class="text-muted"
+    >Hiển thị {{ start_idx }}–{{ end_idx }} / {{ pagination.total }} sách</small
+  >
+  <nav>
+    <ul class="pagination pagination-sm mb-0">
+      {% for p in pagination.iter_pages() %} {% if p %}
+      <li class="page-item {{ 'active' if p == pagination.page else '' }}">
+        <a
+          class="page-link"
+          href="{{ url_for('admin_books', page=p, q=q, category_id=selected_category, stock=stock_filter) }}"
+        >
+          {{ p }}
+        </a>
+      </li>
+      {% else %}
+      <li class="page-item disabled"><span class="page-link">…</span></li>
+      {% endif %} {% endfor %}
+    </ul>
+  </nav>
+</div>
+{% endif %} {% endblock %}

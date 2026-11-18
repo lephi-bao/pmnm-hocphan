@@ -1,0 +1,63 @@
+{% extends "base.html" %} {% block title %}Đặt hàng thành công #{{ order.id }} ·
+Nhà sách Sông Hương{% endblock %} {% block content %}
+<div class="card border-0 shadow-sm p-4 mx-auto" style="max-width: 720px">
+  <div class="text-center mb-4">
+    <i class="bi bi-check-circle-fill text-success display-3"></i>
+    <h3 class="fw-bold mt-2">Đặt hàng thành công!</h3>
+    <p class="text-muted">
+      Mã đơn hàng của bạn là <strong>#{{ order.id }}</strong> · Trạng thái:
+      <span class="badge bg-warning text-dark">{{ order.status }}</span>
+    </p>
+  </div>
+
+  <div class="bg-light rounded p-3 mb-4">
+    <h6 class="fw-bold mb-2">Thông tin nhận hàng</h6>
+    <p class="mb-1">
+      <strong>Người nhận:</strong> {{ order.customer_name }} · {{
+      order.customer_phone }}
+    </p>
+    <p class="mb-1"><strong>Địa chỉ:</strong> {{ order.shipping_address }}</p>
+    <p class="mb-0"><strong>Thanh toán:</strong> {{ order.payment_method }}</p>
+  </div>
+
+  <table class="table table-sm align-middle">
+    <thead class="table-light">
+      <tr>
+        <th>Sách</th>
+        <th class="text-end">Đơn giá</th>
+        <th class="text-center">SL</th>
+        <th class="text-end">Thành tiền</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for item in order.items %}
+      <tr>
+        <td>{{ item.book.title }}</td>
+        <td class="text-end">{{ item.unit_price | vnd }}</td>
+        <td class="text-center">{{ item.quantity }}</td>
+        <td class="text-end">{{ item.line_total | vnd }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+    <tfoot>
+      <tr>
+        <td colspan="3" class="text-end text-muted">Phí giao hàng</td>
+        <td class="text-end">
+          {{ "Miễn phí" if order.shipping_fee == 0 else (order.shipping_fee |
+          vnd) }}
+        </td>
+      </tr>
+      <tr>
+        <td colspan="3" class="text-end fw-bold">Tổng thanh toán</td>
+        <td class="text-end price-text fs-5">{{ order.total_amount | vnd }}</td>
+      </tr>
+    </tfoot>
+  </table>
+
+  <div class="text-center mt-3">
+    <a href="{{ url_for('books') }}" class="btn btn-primary px-4"
+      >Tiếp tục mua sách</a
+    >
+  </div>
+</div>
+{% endblock %}

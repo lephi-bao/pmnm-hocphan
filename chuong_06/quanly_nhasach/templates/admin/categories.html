@@ -1,0 +1,103 @@
+{% extends "admin/base_admin.html" %} {% block title %}Danh mục sách · Quản
+trị{% endblock %} {% block content %}
+<h4 class="fw-bold mb-4">
+  Danh mục sách ({{ categories_with_counts | length }})
+</h4>
+
+<div class="row g-4">
+  <div class="col-lg-8">
+    <div class="card border-0 shadow-sm">
+      <div class="table-responsive">
+        <table class="table align-middle mb-0">
+          <thead class="table-light">
+            <tr>
+              <th>Tên danh mục</th>
+              <th class="text-center">Số sách</th>
+              <th>Thao tác</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for cat, book_count in categories_with_counts %}
+            <tr>
+              <td>
+                <a
+                  href="{{ url_for('admin_books', category_id=cat.id) }}"
+                  class="text-dark text-decoration-none fw-medium"
+                >
+                  {{ cat.name }}
+                </a>
+              </td>
+              <td class="text-center">{{ book_count }}</td>
+              <td>
+                <div class="d-flex align-items-center gap-2">
+                  <a
+                    href="{{ url_for('admin_category_edit', category_id=cat.id) }}"
+                    class="text-decoration-none small"
+                    >Sửa</a
+                  >
+                  <form
+                    method="post"
+                    action="{{ url_for('admin_category_delete', category_id=cat.id) }}"
+                    onsubmit="return confirm('Bạn có chắc chắn muốn xoá danh mục {{ cat.name }}?');"
+                  >
+                    <input
+                      type="hidden"
+                      name="csrf_token"
+                      value="{{ csrf_token() }}"
+                    />
+                    <button
+                      type="submit"
+                      class="btn btn-link p-0 text-decoration-none small {% if book_count == 0 %}text-danger{% else %}text-muted opacity-50{% endif %}"
+                    >
+                      Xoá
+                    </button>
+                  </form>
+                </div>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-4">
+    <div class="card border-0 shadow-sm p-3 bg-light">
+      <h6 class="fw-bold mb-3">
+        {{ 'Sửa danh mục: ' + edit_category.name if edit_category else 'Thêm
+        danh mục' }}
+      </h6>
+
+      <form method="post" novalidate>
+        {{ form.hidden_tag() }}
+
+        <div class="mb-3">
+          <label class="form-label small fw-medium"
+            >Tên <span class="text-danger">*</span></label
+          >
+          {{ form.name(class="form-control" + (" is-invalid" if form.name.errors
+          else "")) }} {% for err in form.name.errors %}
+          <div class="invalid-feedback">{{ err }}</div>
+          {% endfor %}
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label small fw-medium">Mô tả</label>
+          {{ form.description(class="form-control", rows="3") }}
+        </div>
+
+        <div class="d-grid gap-2">
+          {{ form.submit(class="btn btn-primary") }} {% if edit_category %}
+          <a
+            href="{{ url_for('admin_categories') }}"
+            class="btn btn-outline-secondary btn-sm"
+            >Huỷ sửa</a
+          >
+          {% endif %}
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}
